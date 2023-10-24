@@ -5,7 +5,7 @@ import de.luxcars.backend.database.MySQLDatabaseDriver;
 import de.luxcars.backend.services.ServiceRegistry;
 import de.luxcars.backend.util.javalin.DefaultAccessManager;
 import de.luxcars.backend.util.GsonJsonMapper;
-import de.luxcars.backend.auth.AuthenticationRoutes;
+import de.luxcars.backend.web.auth.AuthenticationRoutes;
 import io.javalin.Javalin;
 import io.javalin.plugin.bundled.CorsPluginConfig;
 import org.jetbrains.annotations.NotNull;
