@@ -42,8 +42,7 @@ public class DefaultImageService implements ImageService {
   public byte @Nullable [] getImage(int id, boolean defaultImage) {
     try {
       return Files.readAllBytes(Path.of(IMAGE_DIRECTORY, Integer.toString(id)));
-    } catch (IOException exception) {
-      exception.printStackTrace();
+    } catch (IOException ignored) {
     }
 
     if (defaultImage) {

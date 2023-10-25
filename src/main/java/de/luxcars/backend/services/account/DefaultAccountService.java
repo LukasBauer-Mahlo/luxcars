@@ -108,7 +108,7 @@ public class DefaultAccountService implements AccountService {
   private Account fromResultSet(@NotNull ResultSet resultSet) throws SQLException {
     return new Account(
         resultSet.getInt("id"),
-        resultSet.getString("username"),
+        resultSet.getString("mail"),
         resultSet.getString("firstName"),
         resultSet.getString("lastName"),
         resultSet.getString("password"),
