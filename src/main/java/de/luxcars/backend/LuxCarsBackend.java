@@ -6,6 +6,7 @@ import de.luxcars.backend.services.ServiceRegistry;
 import de.luxcars.backend.util.GsonJsonMapper;
 import de.luxcars.backend.util.javalin.DefaultAccessManager;
 import de.luxcars.backend.web.auth.AuthenticationRoutes;
+import de.luxcars.backend.web.general.NameIdMappingRoute;
 import de.luxcars.backend.web.img.ImageRoutes;
 import io.javalin.Javalin;
 import io.javalin.plugin.bundled.CorsPluginConfig;
@@ -41,6 +42,7 @@ public class LuxCarsBackend {
         this.serviceRegistry.getTokenService()
     );
 
+    new NameIdMappingRoute(javalin);
     new ImageRoutes(javalin);
   }
 
