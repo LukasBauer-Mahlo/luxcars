@@ -12,13 +12,21 @@ import org.jetbrains.annotations.Nullable;
 public class DefaultImageService implements ImageService {
 
   private static final String IMAGE_DIRECTORY = "profileImages";
-  private static final File DEFAULT_PROFILE_IMAGE = new File(IMAGE_DIRECTORY, "DEFAULT_IMAGE");
+  private byte[] defaultImage = null;
 
   public DefaultImageService() {
-    File imageDirectory = new File(IMAGE_DIRECTORY);
-    if (!imageDirectory.exists()) {
-      imageDirectory.mkdir();
+    try {
+      this.defaultImage = Files.readAllBytes(Path.of(IMAGE_DIRECTORY, "DEFAULT_IMAGE"));
+
+      File imageDirectory = new File(IMAGE_DIRECTORY);
+      if (!imageDirectory.exists()) {
+        imageDirectory.mkdir();
+      }
+
+    } catch (IOException exception) {
+      exception.printStackTrace();
     }
+
   }
 
   @Override
@@ -31,13 +39,18 @@ public class DefaultImageService implements ImageService {
   }
 
   @Override
-  public @Nullable File getImage(int id, boolean defaultImage) {
-    File imageFile = new File(IMAGE_DIRECTORY, Integer.toString(id));
-    if (defaultImage && !imageFile.exists()) {
-      return DEFAULT_PROFILE_IMAGE;
+  public byte @Nullable [] getImage(int id, boolean defaultImage) {
+    try {
+      return Files.readAllBytes(Path.of(IMAGE_DIRECTORY, Integer.toString(id)));
+    } catch (IOException exception) {
+      exception.printStackTrace();
     }
 
-    return imageFile;
+    if (defaultImage) {
+      return this.defaultImage;
+    }
+
+    return null;
   }
 
   @Override

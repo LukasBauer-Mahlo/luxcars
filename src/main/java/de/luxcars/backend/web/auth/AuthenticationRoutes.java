@@ -1,7 +1,6 @@
 package de.luxcars.backend.web.auth;
 
 import com.google.gson.JsonObject;
-import de.luxcars.backend.LuxCarsBackend;
 import de.luxcars.backend.services.account.AccountService;
 import de.luxcars.backend.services.account.object.Account;
 import de.luxcars.backend.services.image.ImageService;
@@ -28,7 +27,7 @@ public class AuthenticationRoutes {
       }
 
       if (accountService.getAccount(email).isPresent()) { // account already exists
-        context.status(HttpStatus.IM_USED);
+        context.status(HttpStatus.CONFLICT);
         return;
       }
 

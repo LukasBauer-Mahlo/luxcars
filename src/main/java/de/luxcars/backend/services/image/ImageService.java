@@ -10,7 +10,7 @@ public interface ImageService {
 
   void insertImage(int id, @NotNull InputStream inputStream);
 
-  @Nullable File getImage(int id, boolean defaultImage);
+  byte @Nullable [] getImage(int id, boolean defaultImage);
 
   void deleteImage(int id);
 

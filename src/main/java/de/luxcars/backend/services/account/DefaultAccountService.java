@@ -18,7 +18,8 @@ public class DefaultAccountService implements AccountService {
   public DefaultAccountService(DatabaseDriver databaseDriver) {
     this.databaseDriver = databaseDriver;
 
-    this.databaseDriver.executeUpdate("CREATE TABLE IF NOT EXISTS `accounts` ("
+    this.databaseDriver.executeUpdate(
+        "CREATE TABLE IF NOT EXISTS `accounts` ("
         + "    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,"
         + "    mail VARCHAR(64) UNIQUE KEY NOT NULL,"
         + "    firstName VARCHAR(32) NOT NULL,"

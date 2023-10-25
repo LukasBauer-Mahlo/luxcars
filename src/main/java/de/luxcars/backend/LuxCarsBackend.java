@@ -6,6 +6,7 @@ import de.luxcars.backend.services.ServiceRegistry;
 import de.luxcars.backend.util.GsonJsonMapper;
 import de.luxcars.backend.util.javalin.DefaultAccessManager;
 import de.luxcars.backend.web.auth.AuthenticationRoutes;
+import de.luxcars.backend.web.img.ImageRoutes;
 import io.javalin.Javalin;
 import io.javalin.plugin.bundled.CorsPluginConfig;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +31,7 @@ public class LuxCarsBackend {
       config.showJavalinBanner = false;
       config.jsonMapper(new GsonJsonMapper());
       config.accessManager(new DefaultAccessManager(this.serviceRegistry.getTokenService(), this.serviceRegistry.getAccountService()));
-    }).start(1888);
+    }).start(1886);
     //register web handlers
 
     new AuthenticationRoutes(
@@ -39,6 +40,8 @@ public class LuxCarsBackend {
         this.serviceRegistry.getImageService(),
         this.serviceRegistry.getTokenService()
     );
+
+    new ImageRoutes(javalin);
   }
 
   @NotNull
