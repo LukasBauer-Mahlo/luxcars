@@ -21,7 +21,7 @@ public class DatabaseConfig {
 
     public DatabaseConfig() {
         this.enabled = false;
-        this.jdbcUrl = "jdbc:mysql://localhost:3306/devicemanager";
+        this.jdbcUrl = "jdbc:mysql://localhost:3306/luxcars";
         this.user = "user";
         this.password = "password";
     }
