@@ -5,6 +5,7 @@ import de.luxcars.backend.services.account.AccountService;
 import de.luxcars.backend.services.account.object.Account;
 import de.luxcars.backend.services.image.ImageService;
 import de.luxcars.backend.services.token.TokenService;
+import de.luxcars.backend.util.AccountValidator;
 import de.luxcars.backend.util.Constants;
 import de.luxcars.backend.util.javalin.AuthenticationLevel;
 import io.javalin.Javalin;
@@ -21,7 +22,7 @@ public class AuthenticationRoutes {
       String email = context.formParam("email");
       String password = context.formParam("password");
 
-      if (firstName == null || lastName == null || email == null || password == null) {
+      if (firstName == null || lastName == null || email == null || password == null || !AccountValidator.isPasswordValid(password) || !AccountValidator.isNameValid(firstName, lastName)) {
         context.status(HttpStatus.BAD_REQUEST);
         return;
       }
