@@ -40,6 +40,10 @@ public class DefaultImageService implements ImageService {
 
   @Override
   public byte @Nullable [] getImage(int id, boolean defaultImage) {
+    if (id == -1) {
+      return this.defaultImage;
+    }
+
     try {
       return Files.readAllBytes(Path.of(IMAGE_DIRECTORY, Integer.toString(id)));
     } catch (IOException ignored) {
