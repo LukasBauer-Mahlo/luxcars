@@ -3,10 +3,12 @@ package de.luxcars.backend;
 import de.luxcars.backend.database.DatabaseDriver;
 import de.luxcars.backend.database.MySQLDatabaseDriver;
 import de.luxcars.backend.services.ServiceRegistry;
+import de.luxcars.backend.web.chat.ChatRoutes;
 import de.luxcars.backend.util.GsonJsonMapper;
 import de.luxcars.backend.util.javalin.DefaultAccessManager;
-import de.luxcars.backend.web.auth.AuthenticationRoutes;
 import de.luxcars.backend.web.account.AccountRoutes;
+import de.luxcars.backend.web.auth.AuthenticationRoutes;
+import de.luxcars.backend.web.chat.ChatWebSocket;
 import de.luxcars.backend.web.img.ImageRoutes;
 import io.javalin.Javalin;
 import io.javalin.plugin.bundled.CorsPluginConfig;
@@ -44,6 +46,9 @@ public class LuxCarsBackend {
 
     new AccountRoutes(javalin, this.serviceRegistry.getAccountService());
     new ImageRoutes(javalin);
+
+    new ChatRoutes(javalin, this.serviceRegistry.getMessageService(), this.serviceRegistry.getAccountService());
+    new ChatWebSocket(javalin, this.serviceRegistry.getWebSocketService());
   }
 
   @NotNull

@@ -7,6 +7,10 @@ import de.luxcars.backend.services.image.DefaultImageService;
 import de.luxcars.backend.services.image.ImageService;
 import de.luxcars.backend.services.location.DefaultLocationService;
 import de.luxcars.backend.services.location.LocationService;
+import de.luxcars.backend.services.message.DefaultMessageService;
+import de.luxcars.backend.services.message.MessageService;
+import de.luxcars.backend.services.socket.DefaultWebSocketService;
+import de.luxcars.backend.services.socket.WebSocketService;
 import de.luxcars.backend.services.token.DefaultTokenService;
 import de.luxcars.backend.services.token.TokenService;
 import org.jetbrains.annotations.NotNull;
@@ -16,14 +20,16 @@ public class ServiceRegistry {
   private final AccountService accountService;
   private final TokenService tokenService;
   private final LocationService locationService;
+  private MessageService messageService;
 
   private final ImageService imageService = new DefaultImageService();
+  private final WebSocketService webSocketService = new DefaultWebSocketService();
 
   public ServiceRegistry(DatabaseDriver databaseDriver) {
     this.accountService = new DefaultAccountService(databaseDriver);
     this.tokenService = new DefaultTokenService(databaseDriver);
-
     this.locationService = new DefaultLocationService(databaseDriver);
+    this.messageService = new DefaultMessageService(databaseDriver);
   }
 
   @NotNull
@@ -44,6 +50,16 @@ public class ServiceRegistry {
   @NotNull
   public ImageService getImageService() {
     return imageService;
+  }
+
+  @NotNull
+  public WebSocketService getWebSocketService() {
+    return this.webSocketService;
+  }
+
+  @NotNull
+  public MessageService getMessageService() {
+    return this.messageService;
   }
 
 }

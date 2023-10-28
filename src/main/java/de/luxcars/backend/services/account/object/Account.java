@@ -74,4 +74,8 @@ public class Account {
     this.administrator = administrator;
   }
 
+  @Override
+  public String toString() {
+    return this.firstName + " " + this.lastName;
+  }
 }
