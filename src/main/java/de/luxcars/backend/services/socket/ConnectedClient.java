@@ -1,21 +1,21 @@
 package de.luxcars.backend.services.socket;
 
-import org.eclipse.jetty.websocket.api.Session;
+import io.javalin.websocket.WsContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class ConnectedClient {
 
-  private final Session session;
+  private final WsContext context;
   private String selectedChat;
 
-  public ConnectedClient(Session session) {
-    this.session = session;
+  public ConnectedClient(WsContext context) {
+    this.context = context;
   }
 
   @NotNull
-  public Session getSession() {
-    return this.session;
+  public WsContext getContext() {
+    return this.context;
   }
 
   @Nullable

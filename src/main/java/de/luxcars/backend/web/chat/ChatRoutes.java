@@ -41,6 +41,17 @@ public class ChatRoutes {
         return;
       }
 
+      int verificationUserId = chatRoomService.getChatPartnerId(chatRoomId, chatPartnerId);
+      if (verificationUserId == -1) {
+        context.result("Unable to find mapped chat partner to user " + account.getId()).status(HttpStatus.INTERNAL_SERVER_ERROR);
+        return;
+      }
+
+      if (verificationUserId != account.getId()) { // prevent other users for viewing the chatroom
+        context.result("You are not permitted to view this chat room.").status(HttpStatus.FORBIDDEN);
+        return;
+      }
+
       accountService.getAccount(chatPartnerId).ifPresentOrElse(otherAccount -> {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("contactName", otherAccount.toString());

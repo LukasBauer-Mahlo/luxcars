@@ -5,12 +5,14 @@ import de.luxcars.backend.services.chat.ChatRoomService;
 import de.luxcars.backend.services.chat.message.object.Message;
 import java.util.ArrayList;
 import java.util.List;
+import de.luxcars.backend.web.chat.ChatWebSocket;
 import org.jetbrains.annotations.NotNull;
 
 public class DefaultMessageService implements MessageService {
 
   private final DatabaseDriver databaseDriver;
   private final ChatRoomService chatRoomService;
+  private ChatWebSocket chatWebSocket;
 
   public DefaultMessageService(DatabaseDriver databaseDriver, ChatRoomService chatRoomService) {
     this.databaseDriver = databaseDriver;
@@ -37,6 +39,8 @@ public class DefaultMessageService implements MessageService {
       statement.setLong(3, time);
       statement.setString(4, text);
     });
+
+    this.chatWebSocket.publishChatRoomUpdate(chatRoomId);
   }
 
   @Override
@@ -60,6 +64,11 @@ public class DefaultMessageService implements MessageService {
   @Override
   public @NotNull List<Message> getMessages(int firstUser, int secondUser) {
     return this.getMessages(this.chatRoomService.getOrCreateChatRoom(firstUser, secondUser));
+  }
+
+  @Override
+  public void setChatWebSocket(@NotNull ChatWebSocket chatWebSocket) {
+    this.chatWebSocket = chatWebSocket;
   }
 
 }

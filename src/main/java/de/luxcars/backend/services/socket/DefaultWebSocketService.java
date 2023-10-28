@@ -1,29 +1,40 @@
 package de.luxcars.backend.services.socket;
 
-import java.util.ArrayList;
-import java.util.List;
-import org.eclipse.jetty.websocket.api.Session;
+import io.javalin.websocket.WsContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class DefaultWebSocketService implements WebSocketService {
 
   private final List<ConnectedClient> connectedClients = new ArrayList<>();
 
-  @Override
-  public void registerClient(@NotNull Session session) {
-    this.connectedClients.add(new ConnectedClient(session));
+  public DefaultWebSocketService() {
+    Executors.newScheduledThreadPool(1).scheduleAtFixedRate(() -> {
+      for (ConnectedClient client : connectedClients) {
+        client.getContext().sendPing();
+      }
+    }, 0L, 1L, TimeUnit.HOURS);
   }
 
   @Override
-  public void terminateClient(@NotNull Session session) {
-    this.connectedClients.removeIf(client -> client.getSession().equals(session));
+  public void registerClient(@NotNull WsContext wsContext) {
+    this.connectedClients.add(new ConnectedClient(wsContext));
   }
 
   @Override
-  public @Nullable ConnectedClient getClient(@NotNull Session session) {
+  public void terminateClient(@NotNull WsContext wsContext) {
+    this.connectedClients.removeIf(client -> client.getContext().equals(wsContext));
+  }
+
+  @Override
+  public @Nullable ConnectedClient getClient(@NotNull WsContext wsContext) {
     for (ConnectedClient client : this.connectedClients) {
-      if (client.getSession().equals(session)) {
+      if (client.getContext().equals(wsContext)) {
         return client;
       }
     }
