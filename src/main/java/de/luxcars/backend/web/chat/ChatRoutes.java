@@ -3,7 +3,8 @@ package de.luxcars.backend.web.chat;
 import com.google.gson.JsonObject;
 import de.luxcars.backend.services.account.AccountService;
 import de.luxcars.backend.services.account.object.Account;
-import de.luxcars.backend.services.message.MessageService;
+import de.luxcars.backend.services.chat.ChatRoomService;
+import de.luxcars.backend.services.chat.message.MessageService;
 import de.luxcars.backend.util.Constants;
 import de.luxcars.backend.util.IntegerUtilities;
 import de.luxcars.backend.util.javalin.AuthenticationLevel;
@@ -12,14 +13,14 @@ import io.javalin.http.HttpStatus;
 
 public class ChatRoutes {
 
-  public ChatRoutes(Javalin javalin, MessageService messageService, AccountService accountService) {
+  public ChatRoutes(Javalin javalin, ChatRoomService chatRoomService, MessageService messageService, AccountService accountService) {
     javalin.get("/chats/contacts", context -> {
       Account account = context.attribute(Constants.ACCOUNT_ATTRIBUTE_KEY);
       if (account == null) {
         return; // not possible
       }
 
-      context.json(messageService.getChats(account.getId()));
+      context.json(chatRoomService.getChatRoomsByUser(account.getId()));
     }, AuthenticationLevel.USER);
 
     javalin.get("/chat/{userId}", context -> {

@@ -3,12 +3,14 @@ package de.luxcars.backend.services;
 import de.luxcars.backend.database.DatabaseDriver;
 import de.luxcars.backend.services.account.AccountService;
 import de.luxcars.backend.services.account.DefaultAccountService;
+import de.luxcars.backend.services.chat.ChatRoomService;
+import de.luxcars.backend.services.chat.DefaultChatRoomService;
+import de.luxcars.backend.services.chat.message.DefaultMessageService;
+import de.luxcars.backend.services.chat.message.MessageService;
 import de.luxcars.backend.services.image.DefaultImageService;
 import de.luxcars.backend.services.image.ImageService;
 import de.luxcars.backend.services.location.DefaultLocationService;
 import de.luxcars.backend.services.location.LocationService;
-import de.luxcars.backend.services.message.DefaultMessageService;
-import de.luxcars.backend.services.message.MessageService;
 import de.luxcars.backend.services.socket.DefaultWebSocketService;
 import de.luxcars.backend.services.socket.WebSocketService;
 import de.luxcars.backend.services.token.DefaultTokenService;
@@ -20,7 +22,8 @@ public class ServiceRegistry {
   private final AccountService accountService;
   private final TokenService tokenService;
   private final LocationService locationService;
-  private MessageService messageService;
+  private final ChatRoomService chatRoomService;
+  private final MessageService messageService;
 
   private final ImageService imageService = new DefaultImageService();
   private final WebSocketService webSocketService = new DefaultWebSocketService();
@@ -29,7 +32,8 @@ public class ServiceRegistry {
     this.accountService = new DefaultAccountService(databaseDriver);
     this.tokenService = new DefaultTokenService(databaseDriver);
     this.locationService = new DefaultLocationService(databaseDriver);
-    this.messageService = new DefaultMessageService(databaseDriver);
+    this.chatRoomService = new DefaultChatRoomService(databaseDriver, this.accountService);
+    this.messageService = new DefaultMessageService(databaseDriver, this.chatRoomService);
   }
 
   @NotNull
@@ -55,6 +59,11 @@ public class ServiceRegistry {
   @NotNull
   public WebSocketService getWebSocketService() {
     return this.webSocketService;
+  }
+
+  @NotNull
+  public ChatRoomService getChatRoomService() {
+    return this.chatRoomService;
   }
 
   @NotNull
