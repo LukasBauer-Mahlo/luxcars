@@ -8,6 +8,8 @@ public interface MessageService {
 
   void createMessage(int senderId, int receiverId, @NotNull String text);
 
+  @NotNull List<Message> getMessages(int chatRoomId);
+
   @NotNull List<Message> getMessages(int firstUser, int secondUser);
 
 }

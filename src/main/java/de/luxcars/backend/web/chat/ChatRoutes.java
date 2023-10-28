@@ -23,28 +23,33 @@ public class ChatRoutes {
       context.json(chatRoomService.getChatRoomsByUser(account.getId()));
     }, AuthenticationLevel.USER);
 
-    javalin.get("/chat/{userId}", context -> {
+    javalin.get("/chat/{chatRoomId}", context -> {
       Account account = context.attribute(Constants.ACCOUNT_ATTRIBUTE_KEY);
       if (account == null) {
         return; // not possible
       }
 
-      Integer otherId = IntegerUtilities.getFromString(context.pathParam("userId"));
-      if (otherId == null) {
+      Integer chatRoomId = IntegerUtilities.getFromString(context.pathParam("chatRoomId"));
+      if (chatRoomId == null) {
         context.status(HttpStatus.BAD_REQUEST);
         return;
       }
 
-      accountService.getAccount(otherId).ifPresentOrElse(otherAccount -> {
+      int chatPartnerId = chatRoomService.getChatPartnerId(chatRoomId, account.getId());
+      if (chatPartnerId == -1) {
+        context.result("Unable to find mapped chat partner to user " + account.getId()).status(HttpStatus.INTERNAL_SERVER_ERROR);
+        return;
+      }
+
+      accountService.getAccount(chatPartnerId).ifPresentOrElse(otherAccount -> {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("contactName", otherAccount.toString());
         jsonObject.addProperty("contactId", otherAccount.getId());
         jsonObject.addProperty("lastOnline", "not implemented yet");
 
-        jsonObject.add("messages", Constants.GSON.toJsonTree(messageService.getMessages(account.getId(), otherId)));
+        jsonObject.add("messages", Constants.GSON.toJsonTree(messageService.getMessages(chatRoomId)));
         context.json(jsonObject);
       }, () -> context.status(HttpStatus.NOT_FOUND));
-
     }, AuthenticationLevel.USER);
 
     javalin.post("/chat/message/{userId}", context -> {

@@ -2,12 +2,12 @@ package de.luxcars.backend.services.chat;
 
 import de.luxcars.backend.database.DatabaseDriver;
 import de.luxcars.backend.services.account.AccountService;
-import de.luxcars.backend.services.account.object.Account;
 import de.luxcars.backend.services.chat.object.ChatRoom;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
 
 public class DefaultChatRoomService implements ChatRoomService {
 
@@ -49,6 +49,20 @@ public class DefaultChatRoomService implements ChatRoomService {
             return chatRoomId;
           });
         });
+  }
+
+  @Override
+  public int getChatPartnerId(int chatRoomId, int requesterId) {
+    return this.databaseDriver.executeQuery("SELECT * FROM `chat_rooms_users` WHERE `chatRoomId` = ? AND `userId` != ?;", statement -> {
+      statement.setInt(1, chatRoomId);
+      statement.setInt(2, requesterId);
+    }, resultSet -> {
+      if (!resultSet.next()) {
+        return -1;
+      }
+
+      return resultSet.getInt("userId");
+    });
   }
 
   @Override

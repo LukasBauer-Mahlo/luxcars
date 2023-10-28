@@ -40,9 +40,7 @@ public class DefaultMessageService implements MessageService {
   }
 
   @Override
-  public @NotNull List<Message> getMessages(int firstUser, int secondUser) {
-    int chatRoomId = this.chatRoomService.getOrCreateChatRoom(firstUser, secondUser);
-
+  public @NotNull List<Message> getMessages(int chatRoomId) {
     return this.databaseDriver.executeQuery("SELECT * FROM `chat_rooms_messages` WHERE chatRoomId = ? ORDER BY time ASC;", statement -> {
       statement.setInt(1, chatRoomId);
     }, resultSet -> {
@@ -57,6 +55,11 @@ public class DefaultMessageService implements MessageService {
 
       return messages;
     });
+  }
+
+  @Override
+  public @NotNull List<Message> getMessages(int firstUser, int secondUser) {
+    return this.getMessages(this.chatRoomService.getOrCreateChatRoom(firstUser, secondUser));
   }
 
 }

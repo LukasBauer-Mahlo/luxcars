@@ -8,6 +8,8 @@ public interface ChatRoomService {
 
   int getOrCreateChatRoom(int firstUser, int secondUser);
 
+  int getChatPartnerId(int chatRoomId, int requesterId);
+
   @NotNull List<ChatRoom> getChatRoomsByUser(int userId);
 
 }
