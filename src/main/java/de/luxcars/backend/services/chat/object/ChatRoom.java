@@ -4,18 +4,26 @@ import org.jetbrains.annotations.NotNull;
 
 public class ChatRoom {
 
-  private final int id;
+  private final int chatRoomId;
+  private final int otherUserId;
   private final String otherDisplayName;
   private final String lastMessage;
+  private final int unreadMessages;
 
-  public ChatRoom(int id, String otherDisplayName, String lastMessage) {
-    this.id = id;
+  public ChatRoom(int chatRoomId, int otherUserId, String otherDisplayName, String lastMessage, int unreadMessages) {
+    this.chatRoomId = chatRoomId;
+    this.otherUserId = otherUserId;
     this.otherDisplayName = otherDisplayName;
     this.lastMessage = lastMessage;
+    this.unreadMessages = unreadMessages;
   }
 
-  public int getId() {
-    return this.id;
+  public int getChatRoomId() {
+    return this.chatRoomId;
+  }
+
+  public int getOtherUserId() {
+    return this.otherUserId;
   }
 
   @NotNull

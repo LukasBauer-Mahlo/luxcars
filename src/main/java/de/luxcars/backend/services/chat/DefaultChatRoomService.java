@@ -3,11 +3,9 @@ package de.luxcars.backend.services.chat;
 import de.luxcars.backend.database.DatabaseDriver;
 import de.luxcars.backend.services.account.AccountService;
 import de.luxcars.backend.services.chat.object.ChatRoom;
-
+import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.jetbrains.annotations.NotNull;
 
 public class DefaultChatRoomService implements ChatRoomService {
 
@@ -90,7 +88,10 @@ public class DefaultChatRoomService implements ChatRoomService {
         String lastMessage = resultSet.getString("lastMessage");
 
         if (chatPartnerId != 0 && lastMessage != null) {
-          this.accountService.getAccount(chatPartnerId).ifPresent(chatPartner -> chatRooms.add(new ChatRoom(chatRoomId, chatPartner.toString(), lastMessage)));
+          this.accountService.getAccount(chatPartnerId)
+              .ifPresent(chatPartner -> chatRooms.add(
+                  new ChatRoom(chatRoomId, chatPartner.getId(), chatPartner.toString(), lastMessage, 3) // TODO: Implement
+              ));
         }
       }
 
