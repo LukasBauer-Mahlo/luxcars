@@ -1,6 +1,7 @@
 package de.luxcars.backend.web.chat;
 
 import com.google.gson.JsonObject;
+import de.luxcars.backend.LuxCarsBackend;
 import de.luxcars.backend.services.account.AccountService;
 import de.luxcars.backend.services.account.object.Account;
 import de.luxcars.backend.services.chat.ChatRoomService;
@@ -52,6 +53,7 @@ public class ChatRoutes {
         return;
       }
 
+      LuxCarsBackend.getInstance().getServices().getChatReadService().readChat(chatRoomId, account.getId());
       accountService.getAccount(chatPartnerId).ifPresentOrElse(otherAccount -> {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("contactName", otherAccount.toString());

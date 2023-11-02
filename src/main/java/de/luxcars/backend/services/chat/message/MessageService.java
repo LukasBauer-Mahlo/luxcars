@@ -13,6 +13,4 @@ public interface MessageService {
 
   @NotNull List<Message> getMessages(int firstUser, int secondUser);
 
-  void setChatWebSocket(@NotNull ChatWebSocket chatWebSocket);
-
 }

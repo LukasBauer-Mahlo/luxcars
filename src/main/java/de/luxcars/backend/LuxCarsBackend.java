@@ -21,6 +21,8 @@ public class LuxCarsBackend {
   private DatabaseDriver databaseDriver;
   private ServiceRegistry serviceRegistry;
 
+  private ChatWebSocket chatWebSocket;
+
   public static void main(String[] args) {
     LUX_CARS_BACKEND.start();
   }
@@ -48,8 +50,8 @@ public class LuxCarsBackend {
     new ImageRoutes(javalin);
 
     new ChatRoutes(javalin, this.serviceRegistry.getChatRoomService(), this.serviceRegistry.getMessageService(), this.serviceRegistry.getAccountService());
-    ChatWebSocket chatWebSocket = new ChatWebSocket(javalin, getServices().getTokenService());
-    this.serviceRegistry.getMessageService().setChatWebSocket(chatWebSocket);
+
+    this.chatWebSocket = new ChatWebSocket(javalin, this.getServices().getTokenService(), this.getServices().getChatReadService());
   }
 
   @NotNull
@@ -65,6 +67,11 @@ public class LuxCarsBackend {
   @NotNull
   public ServiceRegistry getServices() {
     return this.serviceRegistry;
+  }
+
+  @NotNull
+  public ChatWebSocket getChatWebSocket() {
+    return this.chatWebSocket;
   }
 
 }

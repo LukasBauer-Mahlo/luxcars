@@ -1,5 +1,6 @@
 package de.luxcars.backend.services.chat.message;
 
+import de.luxcars.backend.LuxCarsBackend;
 import de.luxcars.backend.database.DatabaseDriver;
 import de.luxcars.backend.services.chat.ChatRoomService;
 import de.luxcars.backend.services.chat.message.object.Message;
@@ -40,7 +41,8 @@ public class DefaultMessageService implements MessageService {
       statement.setString(4, text);
     });
 
-    this.chatWebSocket.publishChatRoomUpdate(chatRoomId);
+    LuxCarsBackend.getInstance().getServices().getChatReadService().handleNewMessage(chatRoomId, receiverId);
+    LuxCarsBackend.getInstance().getChatWebSocket().publishChatRoomUpdate(chatRoomId);
   }
 
   @Override
@@ -66,9 +68,5 @@ public class DefaultMessageService implements MessageService {
     return this.getMessages(this.chatRoomService.getOrCreateChatRoom(firstUser, secondUser));
   }
 
-  @Override
-  public void setChatWebSocket(@NotNull ChatWebSocket chatWebSocket) {
-    this.chatWebSocket = chatWebSocket;
-  }
 
 }
