@@ -3,9 +3,9 @@ package de.luxcars.backend.services.chat;
 import de.luxcars.backend.database.DatabaseDriver;
 import de.luxcars.backend.services.account.AccountService;
 import de.luxcars.backend.services.chat.object.ChatRoom;
-import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 public class DefaultChatRoomService implements ChatRoomService {
 

@@ -9,8 +9,8 @@ import io.javalin.http.Handler;
 import io.javalin.http.HttpStatus;
 import io.javalin.security.AccessManager;
 import io.javalin.security.RouteRole;
-import org.jetbrains.annotations.NotNull;
 import java.util.Set;
+import org.jetbrains.annotations.NotNull;
 
 public class DefaultAccessManager implements AccessManager {
 

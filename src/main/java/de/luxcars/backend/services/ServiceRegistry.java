@@ -7,8 +7,8 @@ import de.luxcars.backend.services.chat.ChatRoomService;
 import de.luxcars.backend.services.chat.DefaultChatRoomService;
 import de.luxcars.backend.services.chat.message.DefaultMessageService;
 import de.luxcars.backend.services.chat.message.MessageService;
-import de.luxcars.backend.services.chat.read.DefaultChatReadService;
 import de.luxcars.backend.services.chat.read.ChatReadService;
+import de.luxcars.backend.services.chat.read.DefaultChatReadService;
 import de.luxcars.backend.services.image.DefaultImageService;
 import de.luxcars.backend.services.image.ImageService;
 import de.luxcars.backend.services.location.DefaultLocationService;
@@ -17,7 +17,6 @@ import de.luxcars.backend.services.socket.DefaultWebSocketService;
 import de.luxcars.backend.services.socket.WebSocketService;
 import de.luxcars.backend.services.token.DefaultTokenService;
 import de.luxcars.backend.services.token.TokenService;
-import de.luxcars.backend.web.chat.ChatWebSocket;
 import org.jetbrains.annotations.NotNull;
 
 public class ServiceRegistry {

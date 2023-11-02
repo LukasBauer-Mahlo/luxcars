@@ -1,9 +1,9 @@
 package de.luxcars.backend.services.account;
 
 import de.luxcars.backend.services.account.object.Account;
-import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 public interface AccountService {
 

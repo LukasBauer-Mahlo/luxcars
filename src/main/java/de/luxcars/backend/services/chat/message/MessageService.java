@@ -1,9 +1,8 @@
 package de.luxcars.backend.services.chat.message;
 
 import de.luxcars.backend.services.chat.message.object.Message;
-import de.luxcars.backend.web.chat.ChatWebSocket;
-import org.jetbrains.annotations.NotNull;
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 public interface MessageService {
 

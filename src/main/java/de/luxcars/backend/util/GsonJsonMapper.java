@@ -3,12 +3,11 @@ package de.luxcars.backend.util;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.javalin.json.JsonMapper;
-import org.jetbrains.annotations.NotNull;
-
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
+import org.jetbrains.annotations.NotNull;
 
 public class GsonJsonMapper implements JsonMapper {
 

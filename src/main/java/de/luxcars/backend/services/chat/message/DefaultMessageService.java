@@ -4,9 +4,9 @@ import de.luxcars.backend.LuxCarsBackend;
 import de.luxcars.backend.database.DatabaseDriver;
 import de.luxcars.backend.services.chat.ChatRoomService;
 import de.luxcars.backend.services.chat.message.object.Message;
+import de.luxcars.backend.web.chat.ChatWebSocket;
 import java.util.ArrayList;
 import java.util.List;
-import de.luxcars.backend.web.chat.ChatWebSocket;
 import org.jetbrains.annotations.NotNull;
 
 public class DefaultMessageService implements MessageService {

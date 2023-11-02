@@ -1,10 +1,8 @@
 package de.luxcars.backend.services.image;
 
+import java.io.InputStream;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.io.File;
-import java.io.InputStream;
 
 public interface ImageService {
 

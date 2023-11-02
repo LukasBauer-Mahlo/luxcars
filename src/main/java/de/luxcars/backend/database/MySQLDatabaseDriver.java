@@ -2,10 +2,10 @@ package de.luxcars.backend.database;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import de.luxcars.backend.util.Constants;
 import de.luxcars.backend.database.config.DatabaseConfig;
 import de.luxcars.backend.database.function.ThrowableConsumer;
 import de.luxcars.backend.database.function.ThrowableFunction;
+import de.luxcars.backend.util.Constants;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;

@@ -1,7 +1,7 @@
 package de.luxcars.backend.services.chat.message.object;
 
-import org.jetbrains.annotations.NotNull;
 import java.text.SimpleDateFormat;
+import org.jetbrains.annotations.NotNull;
 
 public class Message {
 

@@ -2,7 +2,6 @@ package de.luxcars.backend.web.img;
 
 import de.luxcars.backend.LuxCarsBackend;
 import de.luxcars.backend.util.IntegerUtilities;
-import de.luxcars.backend.util.javalin.AuthenticationLevel;
 import io.javalin.Javalin;
 import io.javalin.http.HttpStatus;
 

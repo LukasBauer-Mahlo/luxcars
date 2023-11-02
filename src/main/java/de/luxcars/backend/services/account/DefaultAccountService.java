@@ -2,14 +2,13 @@ package de.luxcars.backend.services.account;
 
 import de.luxcars.backend.database.DatabaseDriver;
 import de.luxcars.backend.services.account.object.Account;
-import org.jetbrains.annotations.NotNull;
-import org.mindrot.jbcrypt.BCrypt;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class DefaultAccountService implements AccountService {
 
@@ -20,14 +19,14 @@ public class DefaultAccountService implements AccountService {
 
     this.databaseDriver.executeUpdate(
         "CREATE TABLE IF NOT EXISTS `accounts` ("
-        + "    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,"
-        + "    mail VARCHAR(64) UNIQUE KEY NOT NULL,"
-        + "    firstName VARCHAR(32) NOT NULL,"
-        + "    lastName VARCHAR(32) NOT NULL,"
-        + "    password VARCHAR(256) NOT NULL,"
-        + "    administrator BOOLEAN NOT NULL,"
-        + "    disabled BOOLEAN DEFAULT false NOT NULL"
-        + ");");
+            + "    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,"
+            + "    mail VARCHAR(64) UNIQUE KEY NOT NULL,"
+            + "    firstName VARCHAR(32) NOT NULL,"
+            + "    lastName VARCHAR(32) NOT NULL,"
+            + "    password VARCHAR(256) NOT NULL,"
+            + "    administrator BOOLEAN NOT NULL,"
+            + "    disabled BOOLEAN DEFAULT false NOT NULL"
+            + ");");
   }
 
   @Override

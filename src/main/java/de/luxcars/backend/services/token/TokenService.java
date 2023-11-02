@@ -1,7 +1,7 @@
 package de.luxcars.backend.services.token;
 
-import org.jetbrains.annotations.NotNull;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 public interface TokenService {
 
