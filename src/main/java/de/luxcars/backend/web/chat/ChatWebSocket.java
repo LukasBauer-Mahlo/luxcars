@@ -1,6 +1,7 @@
 package de.luxcars.backend.web.chat;
 
 import de.luxcars.backend.LuxCarsBackend;
+import de.luxcars.backend.services.account.AccountService;
 import de.luxcars.backend.services.chat.read.ChatReadService;
 import de.luxcars.backend.services.token.TokenService;
 import de.luxcars.backend.util.IntegerUtilities;
@@ -25,6 +26,8 @@ public class ChatWebSocket {
   private final List<WsContext> connectedClients = new ArrayList<>();
 
   public ChatWebSocket(Javalin javalin, TokenService tokenService, ChatReadService chatReadService) {
+    AccountService accountService = LuxCarsBackend.getInstance().getServices().getAccountService();
+
     Executors.newScheduledThreadPool(1).scheduleAtFixedRate(() -> {
       for (WsContext connectedClient : this.connectedClients) {
         connectedClient.sendPing();
@@ -33,7 +36,15 @@ public class ChatWebSocket {
 
     javalin.ws("/chat", webSocket -> {
       webSocket.onConnect(connectedClients::add);
-      webSocket.onClose(connectedClients::remove);
+      webSocket.onClose(context -> {
+        Integer userId = context.attribute(USER_ID_ATTRIBUTE);
+        if (userId != null) {
+          accountService.getAccount(userId).ifPresent(account -> {
+            account.setLastOnline(System.currentTimeMillis());
+            accountService.updateAccount(account);
+          });
+        }
+      });
 
       webSocket.onMessage(context -> {
         String message = context.message();
@@ -41,7 +52,6 @@ public class ChatWebSocket {
           String token = message.replace(CHAT_LOGIN_ENTRY, "");
           tokenService.getUserIdByToken(token).ifPresent(userId -> {
             context.attribute(USER_ID_ATTRIBUTE, userId);
-
             context.send(UPDATE_UNREAD_CHATS + chatReadService.getUnreadChats(userId));
           });
 
@@ -84,6 +94,17 @@ public class ChatWebSocket {
         return;
       }
     }
+  }
+
+  public boolean isOnline(int userId) {
+    for (WsContext client : this.connectedClients) {
+      Integer currentUserId = client.attribute(USER_ID_ATTRIBUTE);
+      if (currentUserId != null && currentUserId == userId) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
 }

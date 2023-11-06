@@ -6,6 +6,7 @@ import de.luxcars.backend.services.account.AccountService;
 import de.luxcars.backend.services.account.object.Account;
 import de.luxcars.backend.services.chat.ChatRoomService;
 import de.luxcars.backend.services.chat.message.MessageService;
+import de.luxcars.backend.util.AccountOnlineState;
 import de.luxcars.backend.util.Constants;
 import de.luxcars.backend.util.IntegerUtilities;
 import de.luxcars.backend.util.javalin.AuthenticationLevel;
@@ -59,7 +60,7 @@ public class ChatRoutes {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("contactName", otherAccount.toString());
         jsonObject.addProperty("contactId", otherAccount.getId());
-        jsonObject.addProperty("lastOnline", "not implemented yet");
+        jsonObject.addProperty("lastOnline", AccountOnlineState.getOnlineState(otherAccount));
 
         jsonObject.add("messages", Constants.GSON.toJsonTree(messageService.getMessages(chatRoomId)));
         context.json(jsonObject);

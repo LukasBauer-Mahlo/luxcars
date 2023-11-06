@@ -9,15 +9,17 @@ public class Account {
   private String firstName;
   private String lastName;
   private String password;
+  private long lastOnline;
   private boolean disabled;
   private boolean administrator;
 
-  public Account(int id, String mail, String firstName, String lastName, String password, boolean disabled, boolean administrator) {
+  public Account(int id, String mail, String firstName, String lastName, String password, long lastOnline, boolean disabled, boolean administrator) {
     this.id = id;
     this.mail = mail;
     this.firstName = firstName;
     this.lastName = lastName;
     this.password = password;
+    this.lastOnline = lastOnline;
     this.disabled = disabled;
     this.administrator = administrator;
   }
@@ -56,6 +58,14 @@ public class Account {
 
   public void setPassword(@NotNull String password) {
     this.password = password;
+  }
+
+  public long getLastOnline() {
+    return this.lastOnline;
+  }
+
+  public void setLastOnline(long lastOnline) {
+    this.lastOnline = lastOnline;
   }
 
   public boolean isDisabled() {

@@ -24,6 +24,7 @@ public class DefaultAccountService implements AccountService {
             + "    firstName VARCHAR(32) NOT NULL,"
             + "    lastName VARCHAR(32) NOT NULL,"
             + "    password VARCHAR(256) NOT NULL,"
+            + "    lastOnline BIGINT NOT NULL,"
             + "    administrator BOOLEAN NOT NULL,"
             + "    disabled BOOLEAN DEFAULT false NOT NULL"
             + ");");
@@ -61,6 +62,7 @@ public class DefaultAccountService implements AccountService {
 
   @Override
   public @NotNull Account createAccount(@NotNull String mail, @NotNull String firstName, @NotNull String lastName, @NotNull String password, boolean administrator) {
+    long lastOnline = System.currentTimeMillis();
     String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
     int generatedId = this.databaseDriver.executeUpdateWithKeys("INSERT INTO `accounts` (`mail`, `firstName`, `lastName`, `password`, `administrator`) VALUES (?, ?, ?, ?, ?);", statement -> {
       statement.setString(1, mail);
@@ -76,18 +78,19 @@ public class DefaultAccountService implements AccountService {
       return resultSet.getInt(1);
     });
 
-    return new Account(generatedId, mail, firstName, lastName, hashedPassword, true, administrator);
+    return new Account(generatedId, mail, firstName, lastName, hashedPassword, lastOnline, false, administrator);
   }
 
   @Override
   public void updateAccount(@NotNull Account account) {
-    this.databaseDriver.executeUpdate("UPDATE `accounts` SET `firstName` = ?, `lastName` = ?, `password` = ?, `disabled` = ?, `administrator` = ? WHERE `id` = ?;", statement -> {
+    this.databaseDriver.executeUpdate("UPDATE `accounts` SET `firstName` = ?, `lastName` = ?, `password` = ?, `lastOnline` = ?, `disabled` = ?, `administrator` = ? WHERE `id` = ?;", statement -> {
       statement.setString(1, account.getFirstName());
       statement.setString(2, account.getLastName());
       statement.setString(3, account.getPassword());
-      statement.setBoolean(4, account.isDisabled());
-      statement.setBoolean(5, account.isAdministrator());
-      statement.setInt(6, account.getId());
+      statement.setLong(4, account.getLastOnline());
+      statement.setBoolean(5, account.isDisabled());
+      statement.setBoolean(6, account.isAdministrator());
+      statement.setInt(7, account.getId());
     });
   }
 
@@ -111,6 +114,7 @@ public class DefaultAccountService implements AccountService {
         resultSet.getString("firstName"),
         resultSet.getString("lastName"),
         resultSet.getString("password"),
+        resultSet.getLong("lastOnline"),
         resultSet.getBoolean("disabled"),
         resultSet.getBoolean("administrator")
     );
