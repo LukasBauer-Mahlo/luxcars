@@ -25,6 +25,22 @@ public class ChatRoutes {
       context.json(chatRoomService.getChatRoomsByUser(account.getId()));
     }, AuthenticationLevel.USER);
 
+    javalin.post("/chat/start/{targetId}", context -> {
+      Account account = context.attribute(Constants.ACCOUNT_ATTRIBUTE_KEY);
+      if (account == null) {
+        return;
+      }
+
+      Integer targetId = IntegerUtilities.getFromString(context.pathParam("targetId"));
+      if (targetId == null) {
+        context.status(HttpStatus.BAD_REQUEST);
+        return;
+      }
+
+      accountService.getAccount(targetId)
+          .ifPresentOrElse(target -> context.result(String.valueOf(chatRoomService.getOrCreateChatRoom(account.getId(), target.getId()))), () -> context.status(HttpStatus.NOT_FOUND));
+    }, AuthenticationLevel.USER);
+
     javalin.get("/chat/{chatRoomId}", context -> {
       Account account = context.attribute(Constants.ACCOUNT_ATTRIBUTE_KEY);
       if (account == null) {
