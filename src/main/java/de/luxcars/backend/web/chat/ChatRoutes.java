@@ -67,22 +67,26 @@ public class ChatRoutes {
       }, () -> context.status(HttpStatus.NOT_FOUND));
     }, AuthenticationLevel.USER);
 
-    javalin.post("/chat/message/{userId}", context -> {
+    javalin.post("/chat/message/{chatId}", context -> {
       Account account = context.attribute(Constants.ACCOUNT_ATTRIBUTE_KEY);
       if (account == null) {
         return; // not possible
       }
 
       String message = context.header("message");
-      Integer targetUserId = IntegerUtilities.getFromString(context.pathParam("userId"));
-      if (targetUserId == null || message == null) {
+      Integer targetChatId = IntegerUtilities.getFromString(context.pathParam("chatId"));
+      if (targetChatId == null || message == null) {
         context.status(HttpStatus.BAD_REQUEST);
         return;
       }
 
-      accountService.getAccount(targetUserId).ifPresentOrElse(other -> {
-        messageService.createMessage(account.getId(), other.getId(), message);
-      }, () -> context.status(HttpStatus.NOT_FOUND));
+      int chatPartnerId = LuxCarsBackend.getInstance().getServices().getChatRoomService().getChatPartnerId(targetChatId, account.getId());
+      if (chatPartnerId == -1) {
+        context.status(HttpStatus.NOT_FOUND);
+        return;
+      }
+
+      messageService.createMessage(account.getId(), chatPartnerId, message);
     }, AuthenticationLevel.USER);
   }
 

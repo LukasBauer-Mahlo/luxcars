@@ -45,6 +45,8 @@ public class ChatWebSocket {
             accountService.updateAccount(account);
           });
         }
+
+        this.connectedClients.remove(context);
       });
 
       webSocket.onMessage(context -> {
@@ -90,7 +92,7 @@ public class ChatWebSocket {
     int unreadChats = LuxCarsBackend.getInstance().getServices().getChatReadService().getUnreadChats(userId);
     for (WsContext client : this.connectedClients) {
       Integer currentUserId = client.attribute(USER_ID_ATTRIBUTE);
-      if (currentUserId != null && currentUserId == userId && client.session.isOpen()) {
+      if (currentUserId != null && currentUserId == userId) {
         client.send(UPDATE_UNREAD_CHATS + unreadChats);
         return;
       }
