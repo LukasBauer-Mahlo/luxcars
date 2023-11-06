@@ -2,6 +2,7 @@ package de.luxcars.backend.services.chat;
 
 import de.luxcars.backend.database.DatabaseDriver;
 import de.luxcars.backend.services.account.AccountService;
+import de.luxcars.backend.services.chat.message.read.MessageReadService;
 import de.luxcars.backend.services.chat.object.ChatRoom;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,10 +12,12 @@ public class DefaultChatRoomService implements ChatRoomService {
 
   private final DatabaseDriver databaseDriver;
   private final AccountService accountService;
+  private final MessageReadService messageReadService;
 
-  public DefaultChatRoomService(DatabaseDriver databaseDriver, AccountService accountService) {
+  public DefaultChatRoomService(DatabaseDriver databaseDriver, AccountService accountService, MessageReadService messageReadService) {
     this.databaseDriver = databaseDriver;
     this.accountService = accountService;
+    this.messageReadService = messageReadService;
 
     this.databaseDriver.executeUpdate("CREATE TABLE IF NOT EXISTS `chat_rooms` (`chatRoomId` INT NOT NULL PRIMARY KEY AUTO_INCREMENT);");
     this.databaseDriver.executeUpdate(
@@ -90,7 +93,7 @@ public class DefaultChatRoomService implements ChatRoomService {
         if (chatPartnerId != 0 && lastMessage != null) {
           this.accountService.getAccount(chatPartnerId)
               .ifPresent(chatPartner -> chatRooms.add(
-                  new ChatRoom(chatRoomId, chatPartner.getId(), chatPartner.toString(), lastMessage, 3) // TODO: Implement
+                  new ChatRoom(chatRoomId, chatPartner.getId(), chatPartner.toString(), lastMessage, this.messageReadService.getUnreadMessages(userId, chatRoomId))
               ));
         }
       }

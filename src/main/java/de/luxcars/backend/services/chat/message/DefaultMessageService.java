@@ -41,6 +41,7 @@ public class DefaultMessageService implements MessageService {
       statement.setString(4, text);
     });
 
+    LuxCarsBackend.getInstance().getServices().getMessageReadService().addUnreadMessage(receiverId, chatRoomId, time);
     LuxCarsBackend.getInstance().getServices().getChatReadService().handleNewMessage(chatRoomId, receiverId);
     LuxCarsBackend.getInstance().getChatWebSocket().publishChatRoomUpdate(chatRoomId);
   }

@@ -54,6 +54,7 @@ public class ChatRoutes {
       }
 
       LuxCarsBackend.getInstance().getServices().getChatReadService().readChat(chatRoomId, account.getId());
+      LuxCarsBackend.getInstance().getServices().getMessageReadService().clearUnreadMessages(account.getId(), chatRoomId);
       accountService.getAccount(chatPartnerId).ifPresentOrElse(otherAccount -> {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("contactName", otherAccount.toString());
@@ -80,7 +81,6 @@ public class ChatRoutes {
 
       accountService.getAccount(targetUserId).ifPresentOrElse(other -> {
         messageService.createMessage(account.getId(), other.getId(), message);
-        //TODO: Publish with websockets
       }, () -> context.status(HttpStatus.NOT_FOUND));
     }, AuthenticationLevel.USER);
   }

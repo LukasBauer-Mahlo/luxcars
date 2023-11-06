@@ -7,6 +7,8 @@ import de.luxcars.backend.services.chat.ChatRoomService;
 import de.luxcars.backend.services.chat.DefaultChatRoomService;
 import de.luxcars.backend.services.chat.message.DefaultMessageService;
 import de.luxcars.backend.services.chat.message.MessageService;
+import de.luxcars.backend.services.chat.message.read.DefaultMessageReadService;
+import de.luxcars.backend.services.chat.message.read.MessageReadService;
 import de.luxcars.backend.services.chat.read.ChatReadService;
 import de.luxcars.backend.services.chat.read.DefaultChatReadService;
 import de.luxcars.backend.services.image.DefaultImageService;
@@ -27,6 +29,7 @@ public class ServiceRegistry {
   private final ChatRoomService chatRoomService;
   private final MessageService messageService;
   private final ChatReadService chatReadService;
+  private final MessageReadService messageReadService;
 
   private final ImageService imageService = new DefaultImageService();
   private final WebSocketService webSocketService = new DefaultWebSocketService();
@@ -35,7 +38,8 @@ public class ServiceRegistry {
     this.accountService = new DefaultAccountService(databaseDriver);
     this.tokenService = new DefaultTokenService(databaseDriver);
     this.locationService = new DefaultLocationService(databaseDriver);
-    this.chatRoomService = new DefaultChatRoomService(databaseDriver, this.accountService);
+    this.messageReadService = new DefaultMessageReadService(databaseDriver);
+    this.chatRoomService = new DefaultChatRoomService(databaseDriver, this.accountService, this.messageReadService);
     this.messageService = new DefaultMessageService(databaseDriver, this.chatRoomService);
     this.chatReadService = new DefaultChatReadService(databaseDriver);
   }
@@ -78,6 +82,11 @@ public class ServiceRegistry {
   @NotNull
   public ChatReadService getChatReadService() {
     return this.chatReadService;
+  }
+
+  @NotNull
+  public MessageReadService getMessageReadService() {
+    return this.messageReadService;
   }
 
 }
