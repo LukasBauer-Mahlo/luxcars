@@ -7,6 +7,7 @@ import de.luxcars.backend.services.token.TokenService;
 import de.luxcars.backend.util.IntegerUtilities;
 import io.javalin.Javalin;
 import io.javalin.websocket.WsContext;
+import java.sql.SQLInvalidAuthorizationSpecException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -89,7 +90,7 @@ public class ChatWebSocket {
     int unreadChats = LuxCarsBackend.getInstance().getServices().getChatReadService().getUnreadChats(userId);
     for (WsContext client : this.connectedClients) {
       Integer currentUserId = client.attribute(USER_ID_ATTRIBUTE);
-      if (currentUserId != null && currentUserId == userId) {
+      if (currentUserId != null && currentUserId == userId && client.session.isOpen()) {
         client.send(UPDATE_UNREAD_CHATS + unreadChats);
         return;
       }
