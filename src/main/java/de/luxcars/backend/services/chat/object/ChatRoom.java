@@ -36,4 +36,8 @@ public class ChatRoom {
     return this.lastMessage;
   }
 
+  public int getUnreadMessages() {
+    return this.unreadMessages;
+  }
+
 }

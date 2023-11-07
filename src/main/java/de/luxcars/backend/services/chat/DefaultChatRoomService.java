@@ -91,9 +91,16 @@ public class DefaultChatRoomService implements ChatRoomService {
         String lastMessage = resultSet.getString("lastMessage");
 
         if (chatPartnerId != 0 && lastMessage != null) {
+          String finalLastMessage;
+          if (lastMessage.length() > 97) {
+            finalLastMessage = lastMessage.substring(0, 97) + "...";
+          } else {
+              finalLastMessage = lastMessage;
+          }
+
           this.accountService.getAccount(chatPartnerId)
               .ifPresent(chatPartner -> chatRooms.add(
-                  new ChatRoom(chatRoomId, chatPartner.getId(), chatPartner.toString(), lastMessage, this.messageReadService.getUnreadMessages(userId, chatRoomId))
+                  new ChatRoom(chatRoomId, chatPartner.getId(), chatPartner.toString(), finalLastMessageg, this.messageReadService.getUnreadMessages(userId, chatRoomId))
               ));
         }
       }
