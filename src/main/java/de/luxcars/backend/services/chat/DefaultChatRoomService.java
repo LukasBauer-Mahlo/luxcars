@@ -93,8 +93,8 @@ public class DefaultChatRoomService implements ChatRoomService {
 
         if (chatPartnerId != 0 && lastMessage != null) {
           String finalLastMessage;
-          if (lastMessage.length() > 97) {
-            finalLastMessage = lastMessage.substring(0, 97) + "...";
+          if (lastMessage.length() > 40) {
+            finalLastMessage = lastMessage.substring(0, 40) + "...";
           } else {
               finalLastMessage = lastMessage;
           }
