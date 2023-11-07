@@ -2,6 +2,7 @@ package de.luxcars.backend.web.chat;
 
 import de.luxcars.backend.LuxCarsBackend;
 import de.luxcars.backend.services.account.AccountService;
+import de.luxcars.backend.services.chat.ChatRoomService;
 import de.luxcars.backend.services.chat.read.ChatReadService;
 import de.luxcars.backend.services.token.TokenService;
 import de.luxcars.backend.util.IntegerUtilities;
@@ -19,14 +20,15 @@ public class ChatWebSocket {
 
   private static final String CHAT_LOGIN_ENTRY = "Chat-Login:";
   private static final String USER_ID_ATTRIBUTE = "chat_userId";
-  private static final String SELECTED_CHATROOM_ID = "chat_selectedRoom";
 
-  private static final String SELECT_CHAT_ENTRY = "selectChat:";
   private static final String UPDATE_UNREAD_CHATS = "updateUnreadChats:";
 
   private final List<WsContext> connectedClients = new ArrayList<>();
 
-  public ChatWebSocket(Javalin javalin, TokenService tokenService, ChatReadService chatReadService) {
+  private final ChatRoomService chatRoomService;
+
+  public ChatWebSocket(Javalin javalin, TokenService tokenService, ChatReadService chatReadService, ChatRoomService chatRoomService) {
+    this.chatRoomService = chatRoomService;
     AccountService accountService = LuxCarsBackend.getInstance().getServices().getAccountService();
 
     Executors.newScheduledThreadPool(1).scheduleAtFixedRate(() -> {
@@ -67,24 +69,23 @@ public class ChatWebSocket {
           return;
         }
 
-        if (message.startsWith(SELECT_CHAT_ENTRY)) {
-          Integer chatId = IntegerUtilities.getFromString(message.replace(SELECT_CHAT_ENTRY, ""));
-          if (chatId == null) {
-            return;
-          }
-
-          context.attribute(SELECTED_CHATROOM_ID, chatId);
-        }
+        //other routes
       });
     });
   }
 
   public void publishChatRoomUpdate(int chatRoomId) {
     for (WsContext client : this.connectedClients) {
-      Integer selectedChat = client.attribute(SELECTED_CHATROOM_ID);
-      if (selectedChat != null && selectedChat == chatRoomId) {
-        client.send("updateChat:" + selectedChat);
+      Integer userId = client.attribute(USER_ID_ATTRIBUTE);
+      if (userId == null) {
+        continue;
       }
+
+      if (this.chatRoomService.getChatRoomsByUser(userId).stream().noneMatch(chatRoom -> chatRoom.getChatRoomId() == chatRoomId)) {
+        return;
+      }
+
+      client.send("updateChat:" + chatRoomId);
     }
   }
 

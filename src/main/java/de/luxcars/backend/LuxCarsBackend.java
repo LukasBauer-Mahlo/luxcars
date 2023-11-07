@@ -51,7 +51,7 @@ public class LuxCarsBackend {
 
     new ChatRoutes(javalin, this.serviceRegistry.getChatRoomService(), this.serviceRegistry.getMessageService(), this.serviceRegistry.getAccountService());
 
-    this.chatWebSocket = new ChatWebSocket(javalin, this.getServices().getTokenService(), this.getServices().getChatReadService());
+    this.chatWebSocket = new ChatWebSocket(javalin, this.getServices().getTokenService(), this.getServices().getChatReadService(), this.getServices().getChatRoomService());
   }
 
   @NotNull
