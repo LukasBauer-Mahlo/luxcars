@@ -77,7 +77,8 @@ public class DefaultChatRoomService implements ChatRoomService {
         "      FROM chat_rooms_users cru1 " +
         "      INNER JOIN chat_rooms_users cru2 " +
         "      ON cru1.chatRoomId = cru2.chatRoomId " +
-        "      WHERE cru1.userId = ? AND cru2.userId != ?) AS cr";
+        "      WHERE cru1.userId = ? AND cru2.userId != ?) AS cr"
+        + "    ORDER BY cr.lastMessage ASC;";
 
     List<ChatRoom> chatRooms = new ArrayList<>();
 
