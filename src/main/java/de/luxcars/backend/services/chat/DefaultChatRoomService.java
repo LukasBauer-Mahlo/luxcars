@@ -100,7 +100,7 @@ public class DefaultChatRoomService implements ChatRoomService {
 
           this.accountService.getAccount(chatPartnerId)
               .ifPresent(chatPartner -> chatRooms.add(
-                  new ChatRoom(chatRoomId, chatPartner.getId(), chatPartner.toString(), finalLastMessageg, this.messageReadService.getUnreadMessages(userId, chatRoomId))
+                  new ChatRoom(chatRoomId, chatPartner.getId(), chatPartner.toString(), finalLastMessage, this.messageReadService.getUnreadMessages(userId, chatRoomId))
               ));
         }
       }
