@@ -7,6 +7,7 @@ import de.luxcars.backend.util.GsonJsonMapper;
 import de.luxcars.backend.util.javalin.DefaultAccessManager;
 import de.luxcars.backend.web.account.AccountRoutes;
 import de.luxcars.backend.web.auth.AuthenticationRoutes;
+import de.luxcars.backend.web.cars.CarFilterRoute;
 import de.luxcars.backend.web.chat.ChatRoutes;
 import de.luxcars.backend.web.chat.ChatWebSocket;
 import de.luxcars.backend.web.img.ImageRoutes;
@@ -52,6 +53,8 @@ public class LuxCarsBackend {
     new ChatRoutes(javalin, this.serviceRegistry.getChatRoomService(), this.serviceRegistry.getMessageService(), this.serviceRegistry.getAccountService());
 
     this.chatWebSocket = new ChatWebSocket(javalin, this.getServices().getTokenService(), this.getServices().getChatReadService(), this.getServices().getChatRoomService());
+
+    new CarFilterRoute(javalin);
   }
 
   @NotNull
