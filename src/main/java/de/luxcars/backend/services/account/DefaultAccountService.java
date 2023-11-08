@@ -64,12 +64,13 @@ public class DefaultAccountService implements AccountService {
   public @NotNull Account createAccount(@NotNull String mail, @NotNull String firstName, @NotNull String lastName, @NotNull String password, boolean administrator) {
     long lastOnline = System.currentTimeMillis();
     String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-    int generatedId = this.databaseDriver.executeUpdateWithKeys("INSERT INTO `accounts` (`mail`, `firstName`, `lastName`, `password`, `administrator`) VALUES (?, ?, ?, ?, ?);", statement -> {
+    int generatedId = this.databaseDriver.executeUpdateWithKeys("INSERT INTO `accounts` (`mail`, `firstName`, `lastName`, `password`, `administrator`, `lastOnline`) VALUES (?, ?, ?, ?, ?, ?);", statement -> {
       statement.setString(1, mail);
       statement.setString(2, firstName);
       statement.setString(3, lastName);
       statement.setString(4, hashedPassword);
       statement.setBoolean(5, administrator);
+      statement.setLong(6, lastOnline);
     }, resultSet -> {
       if (!resultSet.next()) {
         throw new RuntimeException("Unable to generate accountId for account with name " + mail);
