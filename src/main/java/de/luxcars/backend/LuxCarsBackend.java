@@ -13,6 +13,7 @@ import de.luxcars.backend.util.GsonJsonMapper;
 import de.luxcars.backend.util.javalin.DefaultAccessManager;
 import de.luxcars.backend.web.account.AccountRoutes;
 import de.luxcars.backend.web.auth.AuthenticationRoutes;
+import de.luxcars.backend.web.cars.CarInfoRoute;
 import de.luxcars.backend.web.cars.FilterInfoRoute;
 import de.luxcars.backend.web.cars.ListCarsRoute;
 import de.luxcars.backend.web.chat.ChatRoutes;
@@ -63,6 +64,7 @@ public class LuxCarsBackend {
 
     new FilterInfoRoute(javalin);
     new ListCarsRoute(javalin);
+    new CarInfoRoute(javalin);g
   }
 
   @NotNull
