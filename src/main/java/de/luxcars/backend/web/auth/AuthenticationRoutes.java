@@ -3,7 +3,7 @@ package de.luxcars.backend.web.auth;
 import com.google.gson.JsonObject;
 import de.luxcars.backend.services.account.AccountService;
 import de.luxcars.backend.services.account.object.Account;
-import de.luxcars.backend.services.image.ImageService;
+import de.luxcars.backend.services.image.profile.ProfileImageService;
 import de.luxcars.backend.services.token.TokenService;
 import de.luxcars.backend.util.AccountValidator;
 import de.luxcars.backend.util.Constants;
@@ -15,7 +15,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 public class AuthenticationRoutes {
 
-  public AuthenticationRoutes(Javalin javalin, AccountService accountService, ImageService imageService, TokenService tokenService) {
+  public AuthenticationRoutes(Javalin javalin, AccountService accountService, ProfileImageService profileImageService, TokenService tokenService) {
     javalin.post("/auth/register", context -> {
       String firstName = context.formParam("firstName");
       String lastName = context.formParam("lastName");
@@ -35,7 +35,7 @@ public class AuthenticationRoutes {
       Account account = accountService.createAccount(email, firstName, lastName, password, false);
       UploadedFile uploadedFile = context.uploadedFile("profileImage");
       if (uploadedFile != null) {
-        imageService.insertImage(account.getId(), uploadedFile.content());
+        profileImageService.insertImage(account.getId(), uploadedFile.content());
       }
 
       JsonObject result = new JsonObject();

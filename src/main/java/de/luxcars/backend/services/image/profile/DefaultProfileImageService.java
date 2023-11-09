@@ -1,4 +1,4 @@
-package de.luxcars.backend.services.image;
+package de.luxcars.backend.services.image.profile;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,12 +9,12 @@ import java.nio.file.StandardCopyOption;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class DefaultImageService implements ImageService {
+public class DefaultProfileImageService implements ProfileImageService {
 
   private static final String IMAGE_DIRECTORY = "profileImages";
   private byte[] defaultImage = null;
 
-  public DefaultImageService() {
+  public DefaultProfileImageService() {
     try {
       this.defaultImage = Files.readAllBytes(Path.of(IMAGE_DIRECTORY, "DEFAULT_IMAGE"));
 

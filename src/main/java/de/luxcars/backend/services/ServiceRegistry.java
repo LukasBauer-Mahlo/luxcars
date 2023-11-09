@@ -11,8 +11,8 @@ import de.luxcars.backend.services.chat.message.read.DefaultMessageReadService;
 import de.luxcars.backend.services.chat.message.read.MessageReadService;
 import de.luxcars.backend.services.chat.read.ChatReadService;
 import de.luxcars.backend.services.chat.read.DefaultChatReadService;
-import de.luxcars.backend.services.image.DefaultImageService;
-import de.luxcars.backend.services.image.ImageService;
+import de.luxcars.backend.services.image.profile.DefaultProfileImageService;
+import de.luxcars.backend.services.image.profile.ProfileImageService;
 import de.luxcars.backend.services.inventory.CarInventoryService;
 import de.luxcars.backend.services.inventory.DefaultCarInventoryService;
 import de.luxcars.backend.services.location.DefaultLocationService;
@@ -34,7 +34,7 @@ public class ServiceRegistry {
   private final MessageReadService messageReadService;
   private final CarInventoryService carInventoryService;
 
-  private final ImageService imageService = new DefaultImageService();
+  private final ProfileImageService profileImageService = new DefaultProfileImageService();
   private final WebSocketService webSocketService = new DefaultWebSocketService();
 
   public ServiceRegistry(DatabaseDriver databaseDriver) {
@@ -64,8 +64,8 @@ public class ServiceRegistry {
   }
 
   @NotNull
-  public ImageService getImageService() {
-    return imageService;
+  public ProfileImageService getImageService() {
+    return profileImageService;
   }
 
   @NotNull

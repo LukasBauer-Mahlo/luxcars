@@ -1,10 +1,10 @@
-package de.luxcars.backend.services.image;
+package de.luxcars.backend.services.image.profile;
 
 import java.io.InputStream;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface ImageService {
+public interface ProfileImageService {
 
   void insertImage(int id, @NotNull InputStream inputStream);
 
