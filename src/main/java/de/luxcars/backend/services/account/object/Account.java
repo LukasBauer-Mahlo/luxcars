@@ -1,6 +1,7 @@
 package de.luxcars.backend.services.account.object;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class Account {
 
@@ -8,16 +9,18 @@ public class Account {
   private final String mail;
   private String firstName;
   private String lastName;
+  private String location;
   private String password;
   private long lastOnline;
   private boolean disabled;
   private boolean administrator;
 
-  public Account(int id, String mail, String firstName, String lastName, String password, long lastOnline, boolean disabled, boolean administrator) {
+  public Account(int id, String mail, String firstName, String lastName, String location, String password, long lastOnline, boolean disabled, boolean administrator) {
     this.id = id;
     this.mail = mail;
     this.firstName = firstName;
     this.lastName = lastName;
+    this.location = location;
     this.password = password;
     this.lastOnline = lastOnline;
     this.disabled = disabled;
@@ -49,6 +52,15 @@ public class Account {
 
   public void setLastName(@NotNull String lastName) {
     this.lastName = lastName;
+  }
+
+  @Nullable
+  public String getLocation() {
+    return this.location;
+  }
+
+  public void setLocation(@Nullable String location) {
+    this.location = location;
   }
 
   @NotNull

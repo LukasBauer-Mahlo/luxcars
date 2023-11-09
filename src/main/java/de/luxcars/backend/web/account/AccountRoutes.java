@@ -30,6 +30,7 @@ public class AccountRoutes {
       JsonObject result = new JsonObject();
       result.addProperty("firstName", account.getFirstName());
       result.addProperty("lastName", account.getLastName());
+      result.addProperty("location", account.getLocation() != null ? account.getLocation() : "");
       result.addProperty("mail", account.getMail());
       context.json(result);
     }, AuthenticationLevel.USER);
@@ -58,6 +59,20 @@ public class AccountRoutes {
         }
 
         account.setLastName(lastName);
+      }
+
+      String location = context.formParam("location");
+      if (location != null) {
+        if (!AccountValidator.isLocationValid(location)) {
+          context.result("Invalid location set").status(HttpStatus.BAD_REQUEST);
+          return;
+        }
+
+        if (location.trim().isEmpty()) {
+          account.setLocation(null);
+        } else {
+          account.setLocation(location);
+        }
       }
 
       UploadedFile uploadedFile = context.uploadedFile("profileImage");

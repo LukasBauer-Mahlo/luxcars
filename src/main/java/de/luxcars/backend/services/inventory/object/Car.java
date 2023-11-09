@@ -103,7 +103,10 @@ public class Car {
   public OwnerInfo getOwnerInfo() {
     if (this.ownerInfo == null) {
       Account account = LuxCarsBackend.getInstance().getServices().getAccountService().getAccount(this.ownerId).orElseThrow(); // not possible because car is linked to accounts table
-      this.ownerInfo = new OwnerInfo(account.getFirstName() + " " + account.getLastName(), "Not implemented yet."); // TODO
+      this.ownerInfo = new OwnerInfo(
+          account.getFirstName() + " " + account.getLastName(),
+          account.getLocation() != null ? account.getLocation() : "Nicht verfügbar"
+      );
     }
 
     return this.ownerInfo;

@@ -23,6 +23,7 @@ public class DefaultAccountService implements AccountService {
             + "    mail VARCHAR(64) UNIQUE KEY NOT NULL,"
             + "    firstName VARCHAR(32) NOT NULL,"
             + "    lastName VARCHAR(32) NOT NULL,"
+            + "    location VARCHAR(50),"
             + "    password VARCHAR(256) NOT NULL,"
             + "    lastOnline BIGINT NOT NULL,"
             + "    administrator BOOLEAN NOT NULL,"
@@ -64,35 +65,38 @@ public class DefaultAccountService implements AccountService {
   public @NotNull Account createAccount(@NotNull String mail, @NotNull String firstName, @NotNull String lastName, @NotNull String password, boolean administrator) {
     long lastOnline = System.currentTimeMillis();
     String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-    int generatedId = this.databaseDriver.executeUpdateWithKeys("INSERT INTO `accounts` (`mail`, `firstName`, `lastName`, `password`, `administrator`, `lastOnline`) VALUES (?, ?, ?, ?, ?, ?);", statement -> {
-      statement.setString(1, mail);
-      statement.setString(2, firstName);
-      statement.setString(3, lastName);
-      statement.setString(4, hashedPassword);
-      statement.setBoolean(5, administrator);
-      statement.setLong(6, lastOnline);
-    }, resultSet -> {
-      if (!resultSet.next()) {
-        throw new RuntimeException("Unable to generate accountId for account with name " + mail);
-      }
+    int generatedId = this.databaseDriver.executeUpdateWithKeys("INSERT INTO `accounts` (`mail`, `firstName`, `lastName`, `password`, `administrator`, `lastOnline`) VALUES (?, ?, ?, ?, ?, ?);",
+        statement -> {
+          statement.setString(1, mail);
+          statement.setString(2, firstName);
+          statement.setString(3, lastName);
+          statement.setString(4, hashedPassword);
+          statement.setBoolean(5, administrator);
+          statement.setLong(6, lastOnline);
+        }, resultSet -> {
+          if (!resultSet.next()) {
+            throw new RuntimeException("Unable to generate accountId for account with name " + mail);
+          }
 
-      return resultSet.getInt(1);
-    });
+          return resultSet.getInt(1);
+        });
 
-    return new Account(generatedId, mail, firstName, lastName, hashedPassword, lastOnline, false, administrator);
+    return new Account(generatedId, mail, firstName, lastName, "Nicht verfügbar", hashedPassword, lastOnline, false, administrator);
   }
 
   @Override
   public void updateAccount(@NotNull Account account) {
-    this.databaseDriver.executeUpdate("UPDATE `accounts` SET `firstName` = ?, `lastName` = ?, `password` = ?, `lastOnline` = ?, `disabled` = ?, `administrator` = ? WHERE `id` = ?;", statement -> {
-      statement.setString(1, account.getFirstName());
-      statement.setString(2, account.getLastName());
-      statement.setString(3, account.getPassword());
-      statement.setLong(4, account.getLastOnline());
-      statement.setBoolean(5, account.isDisabled());
-      statement.setBoolean(6, account.isAdministrator());
-      statement.setInt(7, account.getId());
-    });
+    this.databaseDriver.executeUpdate("UPDATE `accounts` SET `firstName` = ?, `lastName` = ?, `password` = ?, `lastOnline` = ?, `disabled` = ?, `administrator` = ?, `location` = ? WHERE `id` = ?;",
+        statement -> {
+          statement.setString(1, account.getFirstName());
+          statement.setString(2, account.getLastName());
+          statement.setString(3, account.getPassword());
+          statement.setLong(4, account.getLastOnline());
+          statement.setBoolean(5, account.isDisabled());
+          statement.setBoolean(6, account.isAdministrator());
+          statement.setObject(7, account.getLocation());
+          statement.setInt(8, account.getId());
+        });
   }
 
   @Override
@@ -114,6 +118,7 @@ public class DefaultAccountService implements AccountService {
         resultSet.getString("mail"),
         resultSet.getString("firstName"),
         resultSet.getString("lastName"),
+        resultSet.getString("location"),
         resultSet.getString("password"),
         resultSet.getLong("lastOnline"),
         resultSet.getBoolean("disabled"),

@@ -1,6 +1,7 @@
 package de.luxcars.backend.util;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class AccountValidator {
 
@@ -22,5 +23,8 @@ public class AccountValidator {
     return true;
   }
 
+  public static boolean isLocationValid(@NotNull String location) {
+    return location.length() <= 50;
+  }
 
 }

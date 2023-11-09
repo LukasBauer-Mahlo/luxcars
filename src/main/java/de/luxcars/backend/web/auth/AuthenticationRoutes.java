@@ -72,7 +72,7 @@ public class AuthenticationRoutes {
         return; // not possible
       }
 
-      tokenService.invalidateAllTokens(account.getId());
+      tokenService.invalidateToken(context.header("token")); // is always present
     }, AuthenticationLevel.USER);
   }
 
