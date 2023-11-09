@@ -1,7 +1,7 @@
 package de.luxcars.backend.web.img;
 
 import de.luxcars.backend.LuxCarsBackend;
-import de.luxcars.backend.util.IntegerUtilities;
+import de.luxcars.backend.util.NumberUtilities;
 import io.javalin.Javalin;
 import io.javalin.http.HttpStatus;
 
@@ -9,7 +9,7 @@ public class ImageRoutes {
 
   public ImageRoutes(Javalin javalin) {
     javalin.get("/profile/image/{userId}", context -> {
-      Integer userId = IntegerUtilities.getFromString(context.pathParam("userId"));
+      Integer userId = NumberUtilities.getInteger(context.pathParam("userId"));
       if (userId == null) {
         context.status(HttpStatus.BAD_REQUEST);
         return;

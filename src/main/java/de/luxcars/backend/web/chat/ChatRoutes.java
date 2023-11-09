@@ -8,7 +8,7 @@ import de.luxcars.backend.services.chat.ChatRoomService;
 import de.luxcars.backend.services.chat.message.MessageService;
 import de.luxcars.backend.util.AccountOnlineState;
 import de.luxcars.backend.util.Constants;
-import de.luxcars.backend.util.IntegerUtilities;
+import de.luxcars.backend.util.NumberUtilities;
 import de.luxcars.backend.util.javalin.AuthenticationLevel;
 import io.javalin.Javalin;
 import io.javalin.http.HttpStatus;
@@ -31,7 +31,7 @@ public class ChatRoutes {
         return;
       }
 
-      Integer targetId = IntegerUtilities.getFromString(context.pathParam("targetId"));
+      Integer targetId = NumberUtilities.getInteger(context.pathParam("targetId"));
       if (targetId == null) {
         context.status(HttpStatus.BAD_REQUEST);
         return;
@@ -47,7 +47,7 @@ public class ChatRoutes {
         return; // not possible
       }
 
-      Integer chatRoomId = IntegerUtilities.getFromString(context.pathParam("chatRoomId"));
+      Integer chatRoomId = NumberUtilities.getInteger(context.pathParam("chatRoomId"));
       if (chatRoomId == null) {
         context.status(HttpStatus.BAD_REQUEST);
         return;
@@ -90,7 +90,7 @@ public class ChatRoutes {
       }
 
       String message = context.header("message");
-      Integer targetChatId = IntegerUtilities.getFromString(context.pathParam("chatId"));
+      Integer targetChatId = NumberUtilities.getInteger(context.pathParam("chatId"));
       if (targetChatId == null || message == null) {
         context.status(HttpStatus.BAD_REQUEST);
         return;

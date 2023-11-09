@@ -10,10 +10,10 @@ import de.luxcars.backend.services.inventory.object.PlacesAmount;
 import de.luxcars.backend.services.inventory.object.TransmissionType;
 import io.javalin.Javalin;
 
-public class CarFilterRoute {
+public class FilterInfoRoute {
 
-  public CarFilterRoute(Javalin javalin) {
-    javalin.get("/car/filter", context -> {
+  public FilterInfoRoute(Javalin javalin) {
+    javalin.get("/filter/info", context -> {
       JsonObject globalResponse = new JsonObject();
 
       JsonArray brands = new JsonArray();

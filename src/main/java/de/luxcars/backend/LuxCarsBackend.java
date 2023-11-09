@@ -3,11 +3,18 @@ package de.luxcars.backend;
 import de.luxcars.backend.database.DatabaseDriver;
 import de.luxcars.backend.database.MySQLDatabaseDriver;
 import de.luxcars.backend.services.ServiceRegistry;
+import de.luxcars.backend.services.inventory.object.CarBrand;
+import de.luxcars.backend.services.inventory.object.CarType;
+import de.luxcars.backend.services.inventory.object.DoorsAmount;
+import de.luxcars.backend.services.inventory.object.FuelType;
+import de.luxcars.backend.services.inventory.object.PlacesAmount;
+import de.luxcars.backend.services.inventory.object.TransmissionType;
 import de.luxcars.backend.util.GsonJsonMapper;
 import de.luxcars.backend.util.javalin.DefaultAccessManager;
 import de.luxcars.backend.web.account.AccountRoutes;
 import de.luxcars.backend.web.auth.AuthenticationRoutes;
-import de.luxcars.backend.web.cars.CarFilterRoute;
+import de.luxcars.backend.web.cars.FilterInfoRoute;
+import de.luxcars.backend.web.cars.ListCarsRoute;
 import de.luxcars.backend.web.chat.ChatRoutes;
 import de.luxcars.backend.web.chat.ChatWebSocket;
 import de.luxcars.backend.web.img.ImageRoutes;
@@ -54,7 +61,8 @@ public class LuxCarsBackend {
 
     this.chatWebSocket = new ChatWebSocket(javalin, this.getServices().getTokenService(), this.getServices().getChatReadService(), this.getServices().getChatRoomService());
 
-    new CarFilterRoute(javalin);
+    new FilterInfoRoute(javalin);
+    new ListCarsRoute(javalin);
   }
 
   @NotNull
