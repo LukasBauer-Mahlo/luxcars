@@ -14,7 +14,7 @@ public interface CarInventoryService {
       int minKilometres, int maxKilometres, int @NotNull [] fuelTypes, int @NotNull [] transmissionTypes
   );
 
-  @NotNull Car createCar(int ownerId, @NotNull CarBrand carBrand, @NotNull String model, double price, @NotNull CarType carType, @NotNull DoorsAmount doorsAmount, @NotNull PlacesAmount placesAmount,
+  @NotNull Car createCar(int ownerId, @NotNull CarBrand carBrand, @NotNull String model, @NotNull String description, double price, @NotNull CarType carType, @NotNull DoorsAmount doorsAmount, @NotNull PlacesAmount placesAmount,
       int kilometres, @NotNull FuelType fuelType, @NotNull TransmissionType transmissionType);
 
   @Nullable Car getCar(int carId);

@@ -7,5 +7,6 @@ public interface Constants {
 
   Gson GSON = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
   String ACCOUNT_ATTRIBUTE_KEY = "accountAttribute";
+  String CAR_IMAGES = "carImages";
 
 }

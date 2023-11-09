@@ -11,6 +11,8 @@ import de.luxcars.backend.services.chat.message.read.DefaultMessageReadService;
 import de.luxcars.backend.services.chat.message.read.MessageReadService;
 import de.luxcars.backend.services.chat.read.ChatReadService;
 import de.luxcars.backend.services.chat.read.DefaultChatReadService;
+import de.luxcars.backend.services.image.car.CarImageService;
+import de.luxcars.backend.services.image.car.DefaultCarImageService;
 import de.luxcars.backend.services.image.profile.DefaultProfileImageService;
 import de.luxcars.backend.services.image.profile.ProfileImageService;
 import de.luxcars.backend.services.inventory.CarInventoryService;
@@ -33,6 +35,7 @@ public class ServiceRegistry {
   private final ChatReadService chatReadService;
   private final MessageReadService messageReadService;
   private final CarInventoryService carInventoryService;
+  private final CarImageService carImageService;
 
   private final ProfileImageService profileImageService = new DefaultProfileImageService();
   private final WebSocketService webSocketService = new DefaultWebSocketService();
@@ -46,6 +49,7 @@ public class ServiceRegistry {
     this.messageService = new DefaultMessageService(databaseDriver, this.chatRoomService);
     this.chatReadService = new DefaultChatReadService(databaseDriver);
     this.carInventoryService = new DefaultCarInventoryService(databaseDriver);
+    this.carImageService = new DefaultCarImageService(databaseDriver);
   }
 
   @NotNull
@@ -96,6 +100,11 @@ public class ServiceRegistry {
   @NotNull
   public CarInventoryService getCarInventoryService() {
     return this.carInventoryService;
+  }
+
+  @NotNull
+  public CarImageService getCarImageService() {
+    return this.carImageService;
   }
 
 }

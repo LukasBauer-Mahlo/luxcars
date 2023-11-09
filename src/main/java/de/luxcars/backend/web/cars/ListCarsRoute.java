@@ -60,7 +60,7 @@ public class ListCarsRoute {
 
       JsonArray cars = new JsonArray();
       for (Car car : carInventoryService.getCars(brand, types, maxPrice, minPrice, doors, places, minKilometer, maxKilometer, fuel, transmission)) {
-        cars.add(car.toJson());
+        cars.add(car.toJson(false));
       }
 
       context.json(cars);

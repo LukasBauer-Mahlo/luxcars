@@ -24,7 +24,7 @@ public class CarInfoRoute {
         return;
       }
 
-      context.json(car.toJson());
+      context.json(car.toJson(true));
     });
   }
 

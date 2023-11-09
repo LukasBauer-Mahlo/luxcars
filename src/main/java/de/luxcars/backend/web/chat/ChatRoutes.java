@@ -37,6 +37,12 @@ public class ChatRoutes {
         return;
       }
 
+      if (targetId == account.getId()) {
+        context.result("Can't create a chat with yourself.");
+        context.status(HttpStatus.NOT_ACCEPTABLE);
+        return;
+      }
+
       accountService.getAccount(targetId)
           .ifPresentOrElse(target -> context.result(String.valueOf(chatRoomService.getOrCreateChatRoom(account.getId(), target.getId()))), () -> context.status(HttpStatus.NOT_FOUND));
     }, AuthenticationLevel.USER);

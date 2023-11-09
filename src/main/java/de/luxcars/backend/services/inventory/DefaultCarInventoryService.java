@@ -1,13 +1,19 @@
 package de.luxcars.backend.services.inventory;
 
 import de.luxcars.backend.database.DatabaseDriver;
-import de.luxcars.backend.services.inventory.object.*;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import de.luxcars.backend.services.inventory.object.Car;
+import de.luxcars.backend.services.inventory.object.CarBrand;
+import de.luxcars.backend.services.inventory.object.CarType;
+import de.luxcars.backend.services.inventory.object.DoorsAmount;
+import de.luxcars.backend.services.inventory.object.FuelType;
+import de.luxcars.backend.services.inventory.object.PlacesAmount;
+import de.luxcars.backend.services.inventory.object.TransmissionType;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class DefaultCarInventoryService implements CarInventoryService {
 
@@ -17,7 +23,7 @@ public class DefaultCarInventoryService implements CarInventoryService {
     this.databaseDriver = databaseDriver;
 
     this.databaseDriver.executeUpdate(
-        "CREATE TABLE IF NOT EXISTS `cars` (`carId` INT NOT NULL PRIMARY KEY AUTO_INCREMENT, `ownerId` INT NOT NULL, `brand` TINYINT NOT NULL, `model` VARCHAR(100), `price` DOUBLE NOT NULL, `type` TINYINT NOT NULL, `doors` TINYINT NOT NULL, `places` TINYINT NOT NULL, `kilometres` INT NOT NULL, `fuel` TINYINT NOT NULL, `transmission` TINYINT NOT NULL, FOREIGN KEY (`ownerId`) REFERENCES accounts(`id`));"
+        "CREATE TABLE IF NOT EXISTS `cars` (`carId` INT NOT NULL PRIMARY KEY AUTO_INCREMENT, `ownerId` INT NOT NULL, `brand` TINYINT NOT NULL, `model` VARCHAR(100), `description` VARCHAR(2048) NOT NULL, `price` DOUBLE NOT NULL, `type` TINYINT NOT NULL, `doors` TINYINT NOT NULL, `places` TINYINT NOT NULL, `kilometres` INT NOT NULL, `fuel` TINYINT NOT NULL, `transmission` TINYINT NOT NULL, FOREIGN KEY (`ownerId`) REFERENCES accounts(`id`));"
     );
   }
 
@@ -105,11 +111,12 @@ public class DefaultCarInventoryService implements CarInventoryService {
   }
 
   @Override
-  public @NotNull Car createCar(int ownerId, @NotNull CarBrand carBrand, @NotNull String model, double price, @NotNull CarType carType, @NotNull DoorsAmount doorsAmount,
+  public @NotNull Car createCar(int ownerId, @NotNull CarBrand carBrand, @NotNull String model, @NotNull String description, double price, @NotNull CarType carType, @NotNull DoorsAmount doorsAmount,
       @NotNull PlacesAmount placesAmount, int kilometres, @NotNull FuelType fuelType,
       @NotNull TransmissionType transmissionType) {
     return this.databaseDriver.executeUpdateWithKeys(
-        "INSERT INTO `cars` (`ownerId`, `brand`, `model`, `price`, `type`, `doors`, `places`, `kilometres`, `fuel`, `transmission`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);", statement -> {
+        "INSERT INTO `cars` (`ownerId`, `brand`, `model`, `price`, `type`, `doors`, `places`, `kilometres`, `fuel`, `transmission`, `description`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
+        statement -> {
           statement.setInt(1, ownerId);
           statement.setInt(2, carBrand.ordinal());
           statement.setString(3, model);
@@ -120,6 +127,7 @@ public class DefaultCarInventoryService implements CarInventoryService {
           statement.setInt(8, kilometres);
           statement.setInt(9, fuelType.ordinal());
           statement.setInt(10, transmissionType.ordinal());
+          statement.setString(11, description);
         }, resultSet -> {
           if (!resultSet.next()) {
             throw new RuntimeException("Unable to generate id for new car");
@@ -130,12 +138,15 @@ public class DefaultCarInventoryService implements CarInventoryService {
               ownerId,
               carBrand,
               model,
+              description,
               carType,
               doorsAmount,
               fuelType,
               placesAmount,
               transmissionType,
-              price, kilometres);
+              price,
+              kilometres
+          );
         });
   }
 
@@ -159,6 +170,7 @@ public class DefaultCarInventoryService implements CarInventoryService {
         resultSet.getInt("ownerId"),
         CarBrand.values()[resultSet.getInt("brand")],
         resultSet.getString("model"),
+        resultSet.getString("description"),
         CarType.values()[resultSet.getInt("type")],
         DoorsAmount.values()[resultSet.getInt("doors")],
         FuelType.values()[resultSet.getInt("fuel")],
