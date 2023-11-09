@@ -3,7 +3,9 @@ package de.luxcars.backend.services.inventory;
 import de.luxcars.backend.database.DatabaseDriver;
 import de.luxcars.backend.services.inventory.object.*;
 import org.jetbrains.annotations.NotNull;
-
+import org.jetbrains.annotations.Nullable;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,24 +98,11 @@ public class DefaultCarInventoryService implements CarInventoryService {
     return this.databaseDriver.executeQuery(query.toString(), resultSet -> {
       List<Car> cars = new ArrayList<>();
       while (resultSet.next()) {
-        cars.add(new Car(
-            resultSet.getInt("carId"),
-            resultSet.getInt("ownerId"),
-            CarBrand.values()[resultSet.getInt("brand")],
-            resultSet.getString("model"),
-            CarType.values()[resultSet.getInt("type")],
-            DoorsAmount.values()[resultSet.getInt("doors")],
-            FuelType.values()[resultSet.getInt("fuel")],
-            PlacesAmount.values()[resultSet.getInt("places")],
-            TransmissionType.values()[resultSet.getInt("transmission")],
-            resultSet.getDouble("price"),
-            resultSet.getInt("kilometres")
-        ));
+        cars.add(this.fromResultSet(resultSet));
       }
       return cars;
     });
   }
-
 
   @Override
   public @NotNull Car createCar(int ownerId, @NotNull CarBrand carBrand, @NotNull String model, double price, @NotNull CarType carType, @NotNull DoorsAmount doorsAmount,
@@ -148,6 +137,36 @@ public class DefaultCarInventoryService implements CarInventoryService {
               transmissionType,
               price, kilometres);
         });
+  }
+
+  @Override
+  public @Nullable Car getCar(int carId) {
+    return this.databaseDriver.executeQuery("SELECT * FROM `cars` WHERE `carId` = ?;", statement -> {
+      statement.setInt(1, carId);
+    }, resultSet -> {
+      if (!resultSet.next()) {
+        return null;
+      }
+
+      return this.fromResultSet(resultSet);
+    });
+  }
+
+  @NotNull
+  private Car fromResultSet(@NotNull ResultSet resultSet) throws SQLException {
+    return new Car(
+        resultSet.getInt("carId"),
+        resultSet.getInt("ownerId"),
+        CarBrand.values()[resultSet.getInt("brand")],
+        resultSet.getString("model"),
+        CarType.values()[resultSet.getInt("type")],
+        DoorsAmount.values()[resultSet.getInt("doors")],
+        FuelType.values()[resultSet.getInt("fuel")],
+        PlacesAmount.values()[resultSet.getInt("places")],
+        TransmissionType.values()[resultSet.getInt("transmission")],
+        resultSet.getDouble("price"),
+        resultSet.getInt("kilometres")
+    );
   }
 
 }
