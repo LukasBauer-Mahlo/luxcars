@@ -64,7 +64,7 @@ public class LuxCarsBackend {
 
     new FilterInfoRoute(javalin);
     new ListCarsRoute(javalin);
-    new CarInfoRoute(javalin);g
+    new CarInfoRoute(javalin);
   }
 
   @NotNull
